@@ -6,281 +6,144 @@
     <title>Словарь физических терминов</title>
     <style>
         :root {
-            --bg: #f5f7fa;
-            --card-bg: #ffffff;
-            --text: #1a1a2e;
-            --text-secondary: #4a4a6a;
-            --accent: #2c3e50;
-            --accent-light: #e8ecf1;
-            --border: #eef0f5;
-            --hover: #f0f3f8;
+            --bg: #f5f7fa; --card-bg: #ffffff; --text: #1a1a2e; --text-secondary: #4a4a6a;
+            --accent: #2c3e50; --accent-light: #e8ecf1; --border: #eef0f5; --hover: #f0f3f8;
             --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius: 16px; --radius-sm: 10px; --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--bg);
-            min-height: 100vh;
-            padding: 40px 20px;
-            color: var(--text);
-            -webkit-font-smoothing: antialiased;
+            background: var(--bg); min-height: 100vh; padding: 40px 20px;
+            color: var(--text); -webkit-font-smoothing: antialiased;
         }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 36px; }
+        .header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; color: var(--accent); }
+        .header p { color: var(--text-secondary); margin-top: 6px; font-size: 0.9rem; }
+        .grade-card {
+            background: var(--card-bg); border-radius: var(--radius); overflow: hidden;
+            box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 16px;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 36px;
+        .grade-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 24px; cursor: pointer; user-select: none;
+            background: var(--accent); color: #fff;
         }
-        .header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: var(--accent);
+        .grade-title { font-size: 1.15rem; font-weight: 650; }
+        .grade-arrow { font-size: 18px; transition: transform var(--transition); }
+        .grade-arrow.open { transform: rotate(90deg); }
+        .grade-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .grade-body.show { max-height: 50000px; }
+        .topic-card { border-bottom: 1px solid var(--border); }
+        .topic-card:last-child { border-bottom: none; }
+        .topic-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 24px 14px 36px; cursor: pointer; user-select: none;
+            background: #f8fafc; transition: background var(--transition);
         }
-        .header p {
-            color: var(--text-secondary);
-            margin-top: 6px;
-            font-size: 0.9rem;
-            font-weight: 450;
-        }
-        .dictionary-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-        .accordion-list {
-            padding: 0;
-        }
-        .letter-item {
-            border-bottom: 1px solid var(--border);
-        }
-        .letter-item:last-child {
-            border-bottom: none;
-        }
+        .topic-header:hover { background: #eef2f6; }
+        .topic-title { font-size: 0.95rem; font-weight: 600; color: var(--accent); }
+        .topic-arrow { font-size: 14px; color: var(--text-secondary); transition: transform var(--transition); }
+        .topic-arrow.open { transform: rotate(90deg); }
+        .topic-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+        .topic-body.show { max-height: 40000px; }
+        .letter-item { border-bottom: 1px solid var(--border); }
+        .letter-item:last-child { border-bottom: none; }
         .letter-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 24px;
-            cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 24px 12px 48px; cursor: pointer; user-select: none;
             transition: background var(--transition);
-            user-select: none;
         }
-        .letter-header:hover {
-            background: var(--hover);
-        }
-        .letter-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .letter-header:hover { background: var(--hover); }
+        .letter-title { display: flex; align-items: center; gap: 12px; }
         .letter-icon {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--accent);
-            background: var(--accent-light);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
+            font-size: 20px; font-weight: 700; color: var(--accent);
+            background: var(--accent-light); width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center; border-radius: 10px;
         }
-        .letter-name {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text);
-        }
-        .arrow-icon {
-            font-size: 16px;
-            color: var(--text-secondary);
-            transition: transform var(--transition);
-        }
-        .arrow-icon.open {
-            transform: rotate(90deg);
-        }
+        .letter-name { font-size: 16px; font-weight: 600; color: var(--text); }
+        .arrow-icon { font-size: 14px; color: var(--text-secondary); transition: transform var(--transition); }
+        .arrow-icon.open { transform: rotate(90deg); }
         .terms-list {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.35s ease;
-            background: #fafbfc;
-            border-top: 1px solid transparent;
+            max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+            background: #fafbfc; border-top: 1px solid transparent;
         }
-        .terms-list.show {
-            max-height: 5000px;
-            border-top-color: var(--border);
-        }
+        .terms-list.show { max-height: 5000px; border-top-color: var(--border); }
         .terms-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 8px;
-            padding: 16px 24px 24px 24px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 8px; padding: 16px 24px 24px 60px;
         }
-        .term-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 10px 14px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text);
-            cursor: pointer;
-            transition: all var(--transition);
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .questions-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 8px; padding: 16px 24px 24px 36px;
         }
-        .term-btn::before {
-            content: "▸";
-            font-size: 10px;
-            color: var(--text-secondary);
-            flex-shrink: 0;
-            transition: transform var(--transition);
+        .term-btn, .question-btn {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 10px 14px; font-size: 0.9rem; font-weight: 500; color: var(--text);
+            cursor: pointer; transition: all var(--transition); text-align: left;
+            display: flex; align-items: center; gap: 8px;
         }
-        .term-btn:hover {
-            background: #f6f8fb;
-            border-color: #c0c8d4;
-            transform: translateX(2px);
-        }
-        .term-btn:hover::before {
-            transform: translateX(2px);
-            color: var(--accent);
+        .term-btn::before { content: "▸"; font-size: 10px; color: var(--text-secondary); flex-shrink: 0; }
+        .question-btn::before { content: "?"; font-size: 12px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+        .term-btn:hover, .question-btn:hover {
+            background: #f6f8fb; border-color: #c0c8d4; transform: translateX(2px);
         }
         .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 15, 30, 0.4);
-            backdrop-filter: blur(2px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 15, 30, 0.4); backdrop-filter: blur(2px);
+            justify-content: center; align-items: center; z-index: 1000; padding: 20px;
         }
         .modal-content {
-            background: var(--card-bg);
-            max-width: 680px;
-            width: 100%;
-            border-radius: var(--radius);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-            max-height: 80vh;
-            overflow-y: auto;
+            background: var(--card-bg); max-width: 680px; width: 100%; border-radius: var(--radius);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12); max-height: 80vh; overflow-y: auto;
             border: 1px solid var(--border);
         }
         .modal-header {
-            background: var(--card-bg);
-            padding: 16px 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            background: var(--card-bg); padding: 16px 22px; display: flex;
+            justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 10;
         }
-        .modal-header h2 {
-            font-size: 1.15rem;
-            font-weight: 650;
-            color: var(--accent);
-            margin: 0;
-        }
+        .modal-header h2 { font-size: 1.15rem; font-weight: 650; color: var(--accent); margin: 0; }
         .modal-close {
-            font-size: 22px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            line-height: 1;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all var(--transition);
+            font-size: 22px; cursor: pointer; color: var(--text-secondary); line-height: 1;
+            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; transition: all var(--transition);
         }
-        .modal-close:hover {
-            background: var(--hover);
-            color: var(--text);
-        }
-        .modal-body {
-            padding: 22px;
-        }
+        .modal-close:hover { background: var(--hover); color: var(--text); }
+        .modal-body { padding: 22px; }
         .definition-text {
-            background: #fafbfc;
-            padding: 18px;
-            border-radius: 12px;
-            line-height: 1.65;
-            color: var(--text);
-            font-size: 0.92rem;
-            border: 1px solid var(--border);
+            background: #fafbfc; padding: 18px; border-radius: 12px; line-height: 1.65;
+            color: var(--text); font-size: 0.92rem; border: 1px solid var(--border);
         }
         @media (max-width: 600px) {
-            body {
-                padding: 20px 12px;
-            }
-            .header h1 {
-                font-size: 1.6rem;
-            }
-            .terms-grid {
-                grid-template-columns: 1fr;
-                padding: 12px 16px 20px 16px;
-            }
-            .letter-header {
-                padding: 12px 16px;
-            }
-            .modal-body {
-                padding: 16px;
-            }
-            .definition-text {
-                padding: 14px;
-                font-size: 0.85rem;
-            }
+            body { padding: 20px 12px; }
+            .header h1 { font-size: 1.6rem; }
+            .terms-grid, .questions-grid { grid-template-columns: 1fr; padding: 12px 16px 20px 32px; }
+            .letter-header { padding: 12px 16px 12px 32px; }
+            .topic-header { padding: 12px 16px 12px 24px; }
         }
     </style>
 </head>
 <body>
-
 <div class="container">
     <div class="header">
         <h1>Словарь физических терминов</h1>
         <p>В том числе дополнительные вопросы к билетам экзамена</p>
-        <p style="font-size: 0.8rem; color: #888; margin-top: 2px;">Может помочь перед экзаменом (но я за это не ручаюсь)</p>
+        <p style="font-size:0.8rem;color:#888;margin-top:2px;">Может помочь перед экзаменом (но я за это не ручаюсь)</p>
     </div>
-
-    <div class="dictionary-card">
-        <div id="accordionContainer" class="accordion-list"></div>
-    </div>
+    <div id="gradesContainer"></div>
 </div>
-
 <div id="termModal" class="modal">
     <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modalTermName"></h2>
-            <span class="modal-close">&times;</span>
-        </div>
-        <div class="modal-body">
-            <div class="definition-text" id="modalDefinition"></div>
-        </div>
+        <div class="modal-header"><h2 id="modalTermName"></h2><span class="modal-close">&times;</span></div>
+        <div class="modal-body"><div class="definition-text" id="modalDefinition"></div></div>
     </div>
 </div>
-
 <script>
-    const dictionary = {
-        "А": [
+// ВСЕ ДАННЫЕ БЕЗ ИЗМЕНЕНИЙ
+const D = {
+    "А": [
             { term: "Абсолютная влажность", definition: "Масса водяного пара в единице объёма воздуха. Измеряется в г/м³ или кг/м³ (СИ). (Билет №13)" },
             { term: "Абсолютная влажность воздуха", definition: "Масса водяного пара, содержащегося в 1 м³ воздуха при данных условиях. Измеряется в г/м³." },
             { term: "Абсолютная влажность пара", definition: "Масса водяного пара в единице объёма. Численно равна плотности пара при данных условиях." },
@@ -327,7 +190,7 @@
             { term: "Диамагнетики", definition: "Вещества, намагничивающиеся во внешнем магнитном поле против направления поля. μ < 1. (Билет №12)" },
             { term: "Динамическое равновесие", definition: "Состояние, при котором скорость прямого процесса равна скорости обратного. (Билет №13)" },
             { term: "Диод", definition: "Нелинейный полупроводниковый элемент, пропускающий ток преимущественно в одном направлении. Виды: выпрямительный, стабилитрон, светодиод." },
-            { term: "Дифференциал", definition: "Главная линейная часть приращения функции. Для функции y = f(x): dy = f'(x)dx." },
+            { term: "Дифференциал", definition: "Главная линейная часть приращения функции. Для функции y = f(x): dy = f'(x)dx. Геометрически - касательная к графику функции в данной точке" },
             { term: "Дифференцирование", definition: "Операция нахождения производной (или дифференциала) функции. Основные правила: производная суммы, произведения, частного, сложной функции." },
             { term: "Диэлектрики", definition: "Вещества, в которых практически отсутствуют свободные носители заряда. (Билет №9)" },
             { term: "Дополнительные цвета красок", definition: "Цвета, которые при субтрактивном смешении дают чёрный цвет. Например: голубой + жёлтый + пурпурный." },
@@ -342,17 +205,16 @@
             { term: "Закон Ома для однородного участка цепи", definition: "I = U/R. (Билеты №10, №15)" },
             { term: "Закон Ома для полной цепи", definition: "I = E/(R + r). (Билет №15)" },
             { term: "Закон Ома в дифференциальной форме", definition: "j = σE, где j — плотность тока, σ — удельная проводимость, E — напряжённость электрического поля." },
-            { term: "Закон преломления света", definition: "sinα/sinβ = n₂/n₁. (Билеты №2, №3, №14)" },
+            { term: "Закон преломления света", definition: "sinα/sinβ = n₂/n₁. Луч падающий, луч преломленный и перпендикуляр воставленный к границе раздела двух сред лежат в одной плоскости. (Билеты №2, №3, №14)" },
             { term: "Закон прямолинейного распространения света", definition: "В однородной среде свет распространяется прямолинейно. Следствие принципа Ферма. (Билеты №2, №3, №14)" },
-            { term: "Закон отражения света", definition: "Угол отражения равен углу падения. (Билет №14)" },
+            { term: "Закон отражения света", definition: "Угол отражения равен углу падения. Луч падающий, луч отраженный и перпендикуляр восставленный в точку падения лежат в одной плоскости. (Билет №14)" },
             { term: "Закон распространения света", definition: "Свет в однородной среде распространяется прямолинейно и с постоянной скоростью v = c/n." },
             { term: "Закон сохранения электрического заряда", definition: "В замкнутой системе алгебраическая сумма зарядов сохраняется. (Билет №9)" },
-            { term: "Закон Фарадея", definition: "ЭДС индукции в замкнутом контуре численно равна и противоположна по знаку скорости изменения магнитного потока: E_i = -dΦ/dt." },
             { term: "Законы параллельного соединения", definition: "U = U₁ = U₂; I = I₁ + I₂; 1/R = 1/R₁ + 1/R₂. (Билеты №5, №10, №15)" },
             { term: "Законы последовательного соединения", definition: "I = I₁ = I₂; U = U₁ + U₂; R = R₁ + R₂. (Билеты №5, №10, №15)" },
             { term: "Зеркальное отражение", definition: "Отражение от гладкой поверхности, при котором параллельный пучок остаётся параллельным. (Билет №14)" },
             { term: "Зоны видности плоского зеркала", definition: "Область пространства, из которой видно изображение источника. (Билет №14)" },
-            { term: "Зрительная труба", definition: "Оптический прибор для наблюдения удалённых объектов. Бывает двух типов: труба Кеплера (перевёрнутое изображение) и труба Галилея (прямое)." }
+            { term: "Зрительная труба", definition: "Оптический прибор для наблюдения удалённых объектов. Бывает двух типов: труба Кеплера (перевёрнутое изображение) и труба Галилея (прямое изображение)." }
         ],
         "И": [
             { term: "Излучение", definition: "Вид теплопередачи посредством электромагнитных волн. Не требует среды. (Билет №6)" },
@@ -360,7 +222,7 @@
             { term: "Измерительный мост", definition: "Электрическая схема для точного измерения сопротивлений. Состоит из четырёх резисторов, источника и гальванометра. Баланс моста: R₁/R₂ = R₃/R₄." },
             { term: "Инвариант Аббе", definition: "Для параксиальных лучей на сферической границе раздела сред: n₁(1/a - 1/R) = n₂(1/b - 1/R), где a и b — расстояния до предмета и изображения, R — радиус кривизны." },
             { term: "Индукция магнитного поля", definition: "Силовая характеристика магнитного поля. Вектор B. Единица: Тесла (Тл)." },
-            { term: "Интеграл", definition: "Предел суммы бесконечно малых величин. Геометрически — площадь под графиком функции. Формула Ньютона-Лейбница: ∫_a^b f(x)dx = F(b) - F(a)." },
+            { term: "Интеграл", definition: "Предел суммы бесконечно малых величин. Геометрически — ориентированная площадь под графиком функции. Формула Ньютона-Лейбница: ∫_a^b f(x)dx = F(b) - F(a)." },
             { term: "Интегрирование", definition: "Операция, обратная дифференцированию. Методы: замена переменной, интегрирование по частям." },
             { term: "Испарение", definition: "Парообразование со свободной поверхности жидкости. (Билет №13)" },
             { term: "Источник тока", definition: "Устройство, в котором сторонние силы разделяют заряды, создавая ЭДС. (Билеты №5, №10, №15)" }
@@ -381,7 +243,7 @@
             { term: "Линза", definition: "Прозрачное тело, ограниченное двумя сферическими поверхностями. (Билеты №2, №3, №14)" },
             { term: "Линейное увеличение", definition: "Γ = H/h = |b|/a. (Билеты №2, №3, №14)" },
             { term: "Линии индукции магнитного поля", definition: "Линии, касательные к которым совпадают с направлением вектора B. Всегда замкнуты. (Билеты №1, №12)" },
-            { term: "Линии напряжённости электрического поля", definition: "Линии, касательные к которым совпадают с направлением вектора E. Начинаются на положительных, заканчиваются на отрицательных зарядах." },
+            { term: "Линии напряжённости электрического поля", definition: "Линии, касательные к которым совпадают с направлением вектора E. Свойства: Не пересекаются, Начинаются на положительных зарядах, Заканичваются на отрицательных, Густота пропорциональна модулю напряженности электрического поля" },
             { term: "Линия электропередачи", definition: "Система проводов и оборудования для передачи электрической энергии на расстояние." },
             { term: "Лупа", definition: "Короткофокусная собирающая линза. Γ = d₀/f. (Билет №14)" },
             { term: "Луч", definition: "Геометрическая линия, вдоль которой распространяется световая энергия. Нормаль к волновому фронту." }
@@ -445,7 +307,7 @@
             { term: "Плавкий предохранитель", definition: "Устройство защиты цепи, размыкающее цепь при превышении тока. (Билет №11)" },
             { term: "Плавление", definition: "Переход вещества из твёрдого состояния в жидкое при подводе энергии. Происходит при температуре плавления." },
             { term: "Плоское зеркало", definition: "Плоская отражающая поверхность. Изображение: мнимое, прямое, равное. (Билет №14)" },
-            { term: "Плотность тока (j)", definition: "Векторная величина, равная отношению силы тока I к площади поперечного сечения S: j = I/S. Связана с напряжённостью: j = σE." },
+            { term: "Плотность тока (j)", definition: "векторная физическая величина, которая характеризует плотность потока электрического заряда в рассматриваемой точке. Она показывает, какой заряд проходит за единицу времени через единицу площади поперечного сечения проводника. j = I/S. Связана с напряжённостью: j = σE." },
             { term: "Побочная оптическая ось", definition: "Любая прямая через оптический центр, кроме главной. (Билеты №2, №3, №14)" },
             { term: "Побочный фокус линзы", definition: "Точка на фокальной плоскости, куда фокусируется пучок, параллельный побочной оси. (Билеты №2, №3, №14)" },
             { term: "Полное внутреннее отражение", definition: "Явление отражения света от границы с менее плотной средой при угле падения, превышающем предельный. sinα₀ = n₂/n₁ (n₁ > n₂)." },
@@ -456,13 +318,13 @@
             { term: "Последовательное соединение", definition: "Соединение элементов, при котором ток одинаков, а напряжения складываются." },
             { term: "Постоянный магнит", definition: "Тело, длительно сохраняющее намагниченность. (Билет №12)" },
             { term: "Потенциал электростатического поля (φ)", definition: "Энергетическая характеристика поля. Скалярная величина, равная потенциальной энергии единичного положительного заряда: φ = W_p/q. Единица: Вольт (В)." },
-            { term: "Потенциометр", definition: "Переменный резистор в схеме делителя напряжения. (Билеты №5, №10, №15)" },
-            { term: "Потребитель тока", definition: "Элемент цепи, преобразующий электрическую энергию в другие виды (тепловую, механическую, световую)." },
-            { term: "Правило левой руки №1", definition: "Для силы Ампера: B в ладонь, пальцы — ток, большой палец — сила. (Билет №1)" },
-            { term: "Правило левой руки №2", definition: "Для силы Лоренца: B в ладонь, пальцы — скорость положительного заряда, большой палец — сила. (Билет №1)" },
+            { term: "Потенциометр", definition: "Переменный резистор, подключенный в схеме как делитель напряжения. (Билеты №5, №10, №15)" },
+            { term: "Потребитель тока", definition: "Элемент цепи, преобразующий электрическую энергию в другие виды (тепловую, механическую, световую и т.д.)." },
+            { term: "Правило левой руки №1", definition: "Если мысленно расположить левую руку так, чтобы линии магнитного поля входили в ладонь, а 4 пальца левой рукибыли направленны вдоль тока в проводнике, то отставленный на 90 градусов большой палец левой руки укажет направление силы Ампера, действующей на проводник с током. (Билет №1)" },
+            { term: "Правило левой руки №2", definition: "Если мысленно расположить левую руку так, чтобы линии магнитного поля входили в ладонь, а 4 пальца левой руки указывали направление движения частицы, то отставленный на 90 градусов большой палец левой руки укажет направление силы Лоренца, действующей на положительно заряженную частицу. Сила действующая на отрицательно заряженную частицу будет противоположна. (Билет №1)" },
             { term: "Правило Ленца", definition: "Индукционный ток направлен так, чтобы противодействовать причине, его вызывающей." },
-            { term: "Правило правой руки №1", definition: "Для прямого тока: большой палец — ток, пальцы — линии B. (Билет №1)" },
-            { term: "Правило правой руки №2", definition: "Для соленоида: пальцы — ток в витках, большой палец — B внутри. (Билет №1)" },
+            { term: "Правило правой руки №1", definition: "Если мысленно обхватить проводник с током правой рукай так, чтобы отставленный на 90 градусов большой палец правой руки совпадал с направлением тока в проводе, то оставшиеся 4 пальца правой руки укажут направление магнитных линий прямого провода с током. (Билет №1)" },
+            { term: "Правило правой руки №2", definition: "Если мысленно обхватить соленоид с током правой рукой так, чтобы 4 пальца правой руки совпадали с направлением тока в витках соленоида, то отставленный на 90 градусов большой палец правой руки укажет направление магнитного поля внутри соленоида. (Билет №1)" },
             { term: "Правила знаков в формуле тонкой линзы", definition: "a > 0; b > 0 — действительное, b < 0 — мнимое; f > 0 — собирающая, f < 0 — рассеивающая. (Билеты №2, №3, №14)" },
             { term: "Правила построения изображения в тонкой линзе", definition: "1) Через оптический центр — без преломления. 2) Параллельно оси — через фокус. 3) Через фокус — параллельно оси. (Билеты №2, №3, №14)" },
             { term: "Преломление света", definition: "Изменение направления распространения света при переходе через границу раздела двух сред." },
@@ -492,9 +354,9 @@
             { term: "Световой луч", definition: "Линия, вдоль которой распространяется световая энергия. (Билеты №2, №3, №14)" },
             { term: "Световой пучок", definition: "Совокупность лучей: параллельный, сходящийся, расходящийся. (Билеты №2, №3, №14)" },
             { term: "Сетчатка", definition: "Оболочка глаза с фоторецепторами. (Билет №14)" },
-            { term: "Сила Ампера", definition: "F_A = B·I·L·sinα. (Билет №1)" },
-            { term: "Сила Лоренца", definition: "F_Л = q·v·B·sinα. (Билет №1)" },
-            { term: "Сила тока (I)", definition: "I = dq/dt. Единица: Ампер (А). (Билеты №1, №5, №10, №11, №12, №15)" },
+            { term: "Сила Ампера", definition: "Сила, которая действует на участок проводника с током, помещённый в магнитное поле. F_A = B·I·L·sinα. (Билет №1)" },
+            { term: "Сила Лоренца", definition: "Сила, которая действует на движущуюся заряженную частицу в магнитном поле. F_Л = q·v·B·sinα. (Билет №1)" },
+            { term: "Сила тока (I)", definition: "Скалярная физическая величина, показывающая, какой электрический заряд проходит через поперечное сечение проводника за единицу времени. I = dq/dt. Единица: Ампер (А). (Билеты №1, №5, №10, №11, №12, №15)" },
             { term: "Силовые линии электрического поля", definition: "Линии, касательные к которым совпадают с направлением E. (Билет №9)" },
             { term: "Симметрии и антисимметрии электрических схем", definition: "Метод упрощения расчёта цепей путём выявления точек с одинаковым потенциалом (симметрия) или точек, потенциалы которых противоположны (антисимметрия)." },
             { term: "Скорость распространения света", definition: "В вакууме c ≈ 3·10⁸ м/с. В среде v = c/n, где n — показатель преломления." },
@@ -599,81 +461,152 @@
             { term: "1 Ом", definition: "Единица электрического сопротивления. 1 Ом = 1 В/А." },
             { term: "1 См (Сименс)", definition: "Единица проводимости. 1 См = 1 Ом⁻¹ = 1 А/В." }
         ]
-    };
+};
 
-    const lettersOrder = ["А", "Б", "В", "Г", "Д", "Ж", "З", "И", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Э"];
+const allTermNames = {};
+for(const letter in D) {
+    D[letter].forEach(t => { allTermNames[t.term] = t; });
+}
 
-    const container = document.getElementById("accordionContainer");
-
-    lettersOrder.forEach(letter => {
-        const termsArray = dictionary[letter];
-        if (!termsArray || termsArray.length === 0) return;
-
-        const letterDiv = document.createElement("div");
-        letterDiv.className = "letter-item";
-
-        const header = document.createElement("div");
-        header.className = "letter-header";
-        header.innerHTML = `
-            <div class="letter-title">
-                <div class="letter-icon">${letter}</div>
-                <div class="letter-name">Буква ${letter}</div>
-            </div>
-            <div class="arrow-icon">▶</div>
-        `;
-
-        const termsContainer = document.createElement("div");
-        termsContainer.className = "terms-list";
-
-        const grid = document.createElement("div");
-        grid.className = "terms-grid";
-
-        termsArray.forEach(termObj => {
-            const btn = document.createElement("button");
-            btn.className = "term-btn";
-            btn.textContent = termObj.term;
-            btn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                openModal(termObj);
-            });
-            grid.appendChild(btn);
-        });
-
-        termsContainer.appendChild(grid);
-        letterDiv.appendChild(header);
-        letterDiv.appendChild(termsContainer);
-        container.appendChild(letterDiv);
-
-        let isOpen = false;
-        const arrowSpan = header.querySelector(".arrow-icon");
-        header.addEventListener("click", () => {
-            if (isOpen) {
-                termsContainer.classList.remove("show");
-                arrowSpan.classList.remove("open");
-            } else {
-                termsContainer.classList.add("show");
-                arrowSpan.classList.add("open");
+const gradesData = [
+    {
+        name: "8 класс",
+        topics: [
+            {
+                name: "Молекулярная физика и термодинамика",
+                terms: ["Агрегатное состояние","Атом","Вещество","Газообразное агрегатное состояние","Газотурбинный двигатель","Горение","Давление газа","Давление жидкости","Давление твёрдого тела","Двигатель внутреннего сгорания","Десублимация","Динамическое равновесие","Жидкое агрегатное состояние","Излучение","Изменение внутренней энергии","Испарение","Калориметр","Кипение","Количество теплоты (Q)","Конвекция","Конденсация","Конденсационный гигрометр","КПД теплового двигателя","Кристаллизация (отвердевание)","Молекула","Молекулярно-кинетическая теория (МКТ)","Нагревание","Насыщенный пар","Ненасыщенный пар","Относительная влажность","Относительная влажность воздуха","Относительная влажность пара","Охлаждение","Пар","Паровая турбина","Парообразование","Первое начало термодинамики","Плавление","Психрометр","Твёрдое агрегатное состояние","Температура (1-е толкование)","Температура (2-е толкование)","Тепловое движение молекул","Тепловое равновесие","Тепловой двигатель","Теплоёмкость тела (C)","Теплопередача","Теплопроводность","Точка росы","Удельная теплоёмкость (c)","Удельная теплота испарения","Удельная теплота кипения","Удельная теплота конденсации","Удельная теплота кристаллизации","Удельная теплота парообразования","Удельная теплота плавления","Удельная теплота сгорания топлива","Уравнение теплового баланса","Холодильник","Внутренняя энергия (U)","Возгонка (сублимация)","Волосной гигрометр","Абсолютная влажность","Абсолютная влажность воздуха","Абсолютная влажность пара","1-е положение МКТ","2-е положение МКТ","3-е положение МКТ"],
+                questions: [
+                    {term:"Вопрос 1 (шаблон)",definition:"Текст вопроса. Например: Что такое тепловое равновесие? (Билет №4)"},
+                    {term:"Вопрос 2 (шаблон)",definition:"Текст вопроса. Например: Опишите устройство и принцип действия психрометра. (Билет №13)"}
+                ]
+            },
+            {
+                name: "Электричество",
+                terms: ["Ампер (А)","Амперметр","Ватт (Вт)","ВАХ (вольт-амперная характеристика)","Вольт (В)","Вольтметр","Гальванометр","Диод","Диэлектрики","Закон Джоуля — Ленца","Закон Кулона","Закон Ома для однородного участка цепи","Закон Ома для полной цепи","Закон Ома в дифференциальной форме","Закон сохранения электрического заряда","Законы параллельного соединения","Законы последовательного соединения","Измерительный мост","Источник тока","Лампа накаливания","Линии напряжённости электрического поля","Метод нахождения тока в перемычке","Метод узловых потенциалов","Метод эквивалентного источника","Мостик Уитстона","Мощность тока (P)","Нагрузочная прямая","Напряжение (U)","Напряжённость электрического поля (E)","Нелинейные элементы","Ом (Ом)","Омметр","Параллельное соединение","Перестроение ВАХ","Плавкий предохранитель","Плотность тока (j)","Положительный заряд","Полупроводник","Последовательное соединение","Потенциал электростатического поля (φ)","Потенциометр","Потребитель тока","Принцип суперпозиции для электростатического поля","Проводимость","Проводник","Работа электрического тока","Расчёт полубесконечных цепочек","Резистор","Реостат","Сила тока (I)","Силовые линии электрического поля","Симметрии и антисимметрии электрических схем","Сименс (См)","Сопротивление (R)","Удельное сопротивление (ρ)","Удельное электрическое сопротивление","Химический элемент Даниэля","ЭДС","Электризация","Электрическая проводимость","Электрическая схема","Электрическая цепь","Электрический генератор","Электрический двигатель","Электрический заряд (q)","Электрический ток","Электрическое напряжение","Электрическое поле","Электрическое сопротивление","Электрон","Электроскоп","Электростатика","Элементарный заряд","1 А (Ампер)","1 В (Вольт)","1 Вт (Ватт)","1 Кл (Кулон)","1 Н/Кл (Ньютон на Кулон)","1 Ом","1 См (Сименс)"],
+                questions: [
+                    {term:"Вопрос 1 (шаблон)",definition:"Текст вопроса. Например: Сформулируйте закон Ома для участка цепи. (Билет №10)"}
+                ]
+            },
+            {
+                name: "Магнетизм",
+                terms: ["Вектор магнитной индукции (B)","Диамагнетики","Индукция магнитного поля","Линии индукции магнитного поля","Линия электропередачи","Магнитная проницаемость","Магнитное поле","Магнитный полюс магнита","Магнитостатика","Парамагнетики","Постоянный магнит","Правило левой руки №1","Правило левой руки №2","Правило Ленца","Правило правой руки №1","Правило правой руки №2","Сила Ампера","Сила Лоренца","Соленоид","Трансформатор","Коэффициент трансформации","Ферриты","Ферромагнетики","Электрический звонок","Электрический магнит","Электродвигатель постоянного тока","Электродинамика","Электромагнит","Электромагнитная волна","Электромагнитная индукция","Электромагнитное поле","1 Тл (вращательное движение)","1 Тл (поступательное движение)","1 Вб (Вебер)"],
+                questions: [
+                    {term:"Вопрос 1 (шаблон)",definition:"Текст вопроса. Например: Что такое сила Ампера? (Билет №1)"}
+                ]
+            },
+            {
+                name: "Оптика",
+                terms: ["Абсолютный показатель преломления","Аддитивная цветовая модель лучей","Аккомодация","Близорукость","Волновая оптика","Геометрическая оптика","Главная оптическая ось","Главный фокус линзы","Дальнозоркость","Действительное изображение","Дополнительные цвета красок","Дополнительные цвета лучей","Закон преломления света","Закон прямолинейного распространения света","Закон отражения света","Закон распространения света","Зеркальное отражение","Зоны видности плоского зеркала","Зрительная труба","Инвариант Аббе","Линза","Линейное увеличение","Лупа","Луч","Микроскоп","Мнимое изображение","Мнимый источник","Оптическая длина пути","Оптическая ось тонкой линзы","Оптическая сила линзы (D)","Оптически однородная среда","Оптический центр линзы","Оптическое зеркало","Оптическое изображение","Основные цвета красок","Основные цвета лучей","Относительный показатель преломления","Отражение света","Очки","Параксиальное приближение","Перископ","Плоское зеркало","Побочная оптическая ось","Побочный фокус линзы","Полное внутреннее отражение","Полутень","Поперечное увеличение","Правила знаков в формуле тонкой линзы","Правила построения изображения в тонкой линзе","Преломление света","Принцип Ферма","Продольное увеличение","Рассеивающая линза","Рассеянное отражение","Расстояние наилучшего зрения","Свет","Световой луч","Световой пучок","Сетчатка","Скорость распространения света","Собирающая линза","Спектр","Спектроскоп","Субтрактивная цветовая модель красок","Сферическое зеркало","Телескоп","Тень","Тонкая линза","Точечный источник света","Увеличение линзы","Угол Брюстера","Угол зрения","Угол отражения","Угол падения","Угол полного внутреннего отражения","Угол преломления","Фокальная плоскость линзы","Фокусное расстояние линзы","Фокусное расстояние сферического зеркала","Формула сферического зеркала","Формула тонкой линзы","Хрусталик","1 дптр (диоптрия)"],
+                questions: [
+                    {term:"Вопрос 1 (шаблон)",definition:"Текст вопроса. Например: Сформулируйте закон преломления света. (Билет №2)"}
+                ]
+            },
+            {
+                name: "Общие понятия",
+                terms: ["Физика","Физическое тело","Физическое явление","Нейтрон","Протон"],
+                questions: []
             }
-            isOpen = !isOpen;
-        });
+        ]
+    },
+    { name: "9 класс", topics: [] },
+    { name: "10 класс", topics: [] },
+    { name: "11 класс", topics: [] },
+    {
+        name: "Математика",
+        topics: [
+            {
+                name: "Математический анализ",
+                terms: ["Дифференциал","Дифференцирование","Интеграл","Интегрирование","Производная","Формула Ньютона-Лейбница"],
+                questions: []
+            }
+        ]
+    }
+];
+
+const L = ["А","Б","В","Г","Д","Ж","З","И","К","Л","М","Н","О","П","Р","С","Т","У","Ф","Х","Э"];
+const container = document.getElementById("gradesContainer");
+
+function groupByLetter(terms) {
+    const grouped = {};
+    terms.forEach(name => {
+        const t = allTermNames[name];
+        if(!t) return;
+        const letter = name.charAt(0).toUpperCase();
+        if(!grouped[letter]) grouped[letter] = [];
+        grouped[letter].push(t);
     });
+    return grouped;
+}
 
-    const modal = document.getElementById("termModal");
-    const modalTitle = document.getElementById("modalTermName");
-    const modalDef = document.getElementById("modalDefinition");
+gradesData.forEach(grade => {
+    const gCard = document.createElement("div"); gCard.className = "grade-card";
+    const gH = document.createElement("div"); gH.className = "grade-header";
+    gH.innerHTML = `<span class="grade-title">${grade.name}</span><span class="grade-arrow">▶</span>`;
+    const gB = document.createElement("div"); gB.className = "grade-body";
+    let gOpen = false;
+    gH.onclick = () => { gOpen=!gOpen; gB.classList.toggle("show",gOpen); gH.querySelector(".grade-arrow").classList.toggle("open",gOpen); };
 
-    function openModal(termObj) {
-        modalTitle.textContent = termObj.term;
-        modalDef.textContent = termObj.definition;
-        modal.style.display = "flex";
+    if(grade.topics.length === 0) {
+        const empty = document.createElement("div");
+        empty.style.cssText = "padding:20px 36px;color:#999;font-style:italic;";
+        empty.textContent = "К высочайшему сожалению, я не доучился до этого класса, поэтому здесь пусто. Прошу простить и понять";
+        gB.appendChild(empty);
     }
 
-    document.querySelector(".modal-close").onclick = () => {
-        modal.style.display = "none";
-    };
-    window.onclick = (e) => {
-        if (e.target === modal) modal.style.display = "none";
-    };
+    grade.topics.forEach(topic => {
+        const tCard = document.createElement("div"); tCard.className = "topic-card";
+        const tH = document.createElement("div"); tH.className = "topic-header";
+        tH.innerHTML = `<span class="topic-title">${topic.name}</span><span class="topic-arrow">▶</span>`;
+        const tB = document.createElement("div"); tB.className = "topic-body";
+        let tOpen = false;
+        tH.onclick = (e) => { e.stopPropagation(); tOpen=!tOpen; tB.classList.toggle("show",tOpen); tH.querySelector(".topic-arrow").classList.toggle("open",tOpen); };
+
+        const grouped = groupByLetter(topic.terms);
+        L.forEach(letter => {
+            if(!grouped[letter]) return;
+            const lItem = document.createElement("div"); lItem.className = "letter-item";
+            const lH = document.createElement("div"); lH.className = "letter-header";
+            lH.innerHTML = `<div class="letter-title"><div class="letter-icon">${letter}</div><div class="letter-name">Буква ${letter}</div></div><span class="arrow-icon">▶</span>`;
+            const lB = document.createElement("div"); lB.className = "terms-list";
+            const grid = document.createElement("div"); grid.className = "terms-grid";
+            grouped[letter].forEach(t => {
+                const btn = document.createElement("button"); btn.className = "term-btn"; btn.textContent = t.term;
+                btn.onclick = (e) => { e.stopPropagation(); openModal(t); };
+                grid.appendChild(btn);
+            });
+            lB.appendChild(grid); lItem.appendChild(lH); lItem.appendChild(lB); tB.appendChild(lItem);
+            let lOpen = false;
+            lH.onclick = (e) => { e.stopPropagation(); lOpen=!lOpen; lB.classList.toggle("show",lOpen); lH.querySelector(".arrow-icon").classList.toggle("open",lOpen); };
+        });
+
+        if(topic.questions && topic.questions.length > 0) {
+            const qCard = document.createElement("div"); qCard.className = "letter-item";
+            const qH = document.createElement("div"); qH.className = "letter-header";
+            qH.innerHTML = `<div class="letter-title"><div class="letter-icon" style="background:#2c3e50;color:#fff;">?</div><div class="letter-name">Доп. вопросы</div></div><span class="arrow-icon">▶</span>`;
+            const qB = document.createElement("div"); qB.className = "terms-list";
+            const grid = document.createElement("div"); grid.className = "questions-grid";
+            topic.questions.forEach(q => {
+                const btn = document.createElement("button"); btn.className = "question-btn"; btn.textContent = q.term;
+                btn.onclick = (e) => { e.stopPropagation(); openModal(q); };
+                grid.appendChild(btn);
+            });
+            qB.appendChild(grid); qCard.appendChild(qH); qCard.appendChild(qB); tB.appendChild(qCard);
+            let qOpen = false;
+            qH.onclick = (e) => { e.stopPropagation(); qOpen=!qOpen; qB.classList.toggle("show",qOpen); qH.querySelector(".arrow-icon").classList.toggle("open",qOpen); };
+        }
+
+        tCard.appendChild(tH); tCard.appendChild(tB); gB.appendChild(tCard);
+    });
+    gCard.appendChild(gH); gCard.appendChild(gB); container.appendChild(gCard);
+});
+
+function openModal(item) {
+    document.getElementById("modalTermName").textContent = item.term;
+    document.getElementById("modalDefinition").textContent = item.definition;
+    document.getElementById("termModal").style.display = "flex";
+}
+document.querySelector(".modal-close").onclick = () => document.getElementById("termModal").style.display = "none";
+window.onclick = (e) => { if (e.target === document.getElementById("termModal")) document.getElementById("termModal").style.display = "none"; };
 </script>
 </body>
 </html>
